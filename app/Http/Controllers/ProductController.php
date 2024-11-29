@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\DB;
 use App\Models\Product;
 use App\Models\Vendor;
 use App\Http\Requests\ProductStoreRequest;
+use App\Events\ProductAddedEvent;
 
 class ProductController extends Controller
 {
@@ -48,6 +49,9 @@ class ProductController extends Controller
         }
 
         $product->save();
+
+        // ProductAddedEventを発生させる
+        event(new ProductAddedEvent($product));
 
         // リダイレクトさせる
         return redirect("/products/{$product->id}");
